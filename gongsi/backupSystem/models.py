@@ -2,10 +2,10 @@ from django.db import models
 
 
 class formData(models.Model):
-    formNumber = models.IntegerField()
-    time = models.CharField(max_length=30, blank=True)
-    destination = models.CharField(max_length=50, blank=True)
-    notes = models.CharField(max_length=50, blank=True)
+    formNumber = models.CharField(max_length=20)
+    time = models.CharField(max_length=30)
+    destination = models.CharField(max_length=50)
+    notes = models.CharField(max_length=50)
     deliveryAmount = models.CharField(max_length=20)
     deliveryPlate = models.CharField(max_length=20)
     deliveryPerson = models.CharField(max_length=20)
@@ -13,12 +13,12 @@ class formData(models.Model):
 
 
 class IronData(models.Model):
-    formNumber = models.ForeignKey(formData, on_delete=models.CASCADE)
+    formNumber = models.CharField(max_length=30)
     ironName = models.CharField(max_length=30)
     ironPrice = models.CharField(max_length=30)
     ironProfit = models.CharField(max_length=30)
     Quality = models.CharField(max_length=30)
-    paymentData = models.TimeField()
+    paymentDate = models.CharField(max_length=20)
     dealAmount = models.CharField(max_length=20)
     pickupAmount = models.CharField(max_length=20)
     pickupCompany = models.CharField(max_length=30)
@@ -26,4 +26,4 @@ class IronData(models.Model):
 
 class projectInfo(models.Model):
     projectName = models.CharField(max_length=20)
-    form = models.ManyToManyField(formData)
+    formNumber = models.CharField(max_length=20)
