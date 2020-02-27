@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{%  load crispy_forms_tags %}
+	{% load static %}
+	<title>信息录入系统</title>
+	<meta charset="UTF-8">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'fonts/iconic/css/material-design-iconic-font.min.css' %}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'vendor/animate/animate.css' %}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'vendor/css-hamburgers/hamburgers.min.css' %}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'vendor/animsition/css/animsition.min.css' %}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'vendor/select2/select2.min.css' %}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'vendor/daterangepicker/daterangepicker.css' %}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+
+	<!--===============================================================================================-->
+</head>
+<body>
+
+<div class="bg-container-contact100" style="background-image: url('{% static 'images/bg-01.jpg' %}');">
+	<div class="contact100-header flex-sb-m">
+		<a href="#" class="contact100-header-logo">
+			<img src="{% static 'images/icons/logo.png' %}" alt="LOGO">
+		</a>
+
+		<div>
+			<button class="btn-show-contact100">
+				发货信息录入系统
+			</button>
+		</div>
+	</div>
+</div>
+
+<div class="container-contact100">
+	<div class="wrap-contact100">
+		<button class="btn-hide-contact100">
+			<i class="zmdi zmdi-close"></i>
+		</button>
+
+		<div class="contact100-form-title" style="background-image: url('{% static 'images/bg-02.jpg' %}');">
+			<span>发货信息录入系统</span>
+		</div>
+
+		<div class="overflow-auto">
+			<form class="contact100-form validate-form" method="POST" action="{% url 'getData' %}">
+				{% csrf_token %}
+				<div class="wrap-input100 validate-input">
+					<input id="projectName" class="input100" type="text" name="projectName" placeholder="项目名称">
+					<span class="focus-input100"></span>
+					<label class="label-input100" for="projectName">
+						<span class="lnr lnr-user m-b-2"></span>
+					</label>
+				</div>
+
+				<div class="wrap-input100 validate-input">
+					<input id="formNum" class="input100" type="text" name="formNum" placeholder="提货单编号">
+					<span class="focus-input100"></span>
+					<label class="label-input100" for="formNum">
+						<span class="lnr lnr-user m-b-2"></span>
+					</label>
+				</div>
+
+				<div class="wrap-input100 validate-input">
+					<input id="time" class="input100" type="Date" name="time" placeholder="提货单时间">
+					<span class="focus-input100"></span>
+					<label class="label-input100" for="time">
+						<span class="lnr lnr-user m-b-2"></span>
+					</label>
+				</div>
+
+				<div class="wrap-input100 validate-input">
+					<input id="destination" class="input100" type="text" name="projectName" placeholder="目的地">
+					<span class="focus-input100"></span>
+					<label class="label-input100" for="destination">
+						<span class="lnr lnr-user m-b-2"></span>
+					</label>
+				</div>
+
+				<div class="wrap-input100 validate-input">
+					<input id="deliveryFee" class="input100" type="text" name="projectName" placeholder="运费总额">
+					<span class="focus-input100"></span>
+					<label class="label-input100" for="deliveryFee">
+						<span class="lnr lnr-user m-b-2"></span>
+					</label>
+				</div>
+
+				<div class="wrap-input100 validate-input">
+					<input id="deliveryVehicle" class="input100" type="text" name="projectName" placeholder="运输车辆">
+					<span class="focus-input100"></span>
+					<label class="label-input100" for="deliveryVehicle">
+						<span class="lnr lnr-user m-b-2"></span>
+					</label>
+				</div>
+
+				<div class="wrap-input100 validate-input">
+					<input id="deliveryPerson" class="input100" type="text" name="projectName" placeholder="运输人">
+					<span class="focus-input100"></span>
+					<label class="label-input100" for="deliveryPerson">
+						<span class="lnr lnr-user m-b-2"></span>
+					</label>
+				</div>
+
+
+				<div class="wrap-input100 validate-input">
+					<input id="pickupFee" class="input100" type="text" name="projectName" placeholder="吊装费">
+					<span class="focus-input100"></span>
+					<label class="label-input100" for="pickupFee">
+						<span class="lnr lnr-user m-b-2"></span>
+					</label>
+				</div>
+
+				<div class="wrap-input100">
+					<textarea id="message" class="input100" name="message" placeholder="备注信息"></textarea>
+					<span class="focus-input100"></span>
+					<label class="label-input100 rs1" for="message">
+						<span class="lnr lnr-bubble"></span>
+					</label>
+				</div>
+
+				<div class="wrap-input100">
+					<div class="row">
+						<div class="col ">
+							<button type="button" class="contact100-form-btn " data-toggle="modal" data-target="#exampleModal">
+								添加钢材信息
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="container-contact100-form-btn">
+					<button class="contact100-form-btn">
+						提交
+					</button>
+				</div>
+			</form>
+		</div>
+
+
+	</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">钢材信息</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" >
+				<form class="contact100-form validate-form" method="POST" action="{% url 'getData' %}">
+					{% csrf_token %}
+
+					<div class="wrap-input100 validate-input">
+						<input id="ironName" class="input100" type="text" name="ironName" placeholder="钢材规格">
+						<!--						<span class="focus-input100"></span>-->
+						<!--						<label class="label-input100" for="ironName">-->
+						<!--							<span class="lnr lnr-user m-b-2"></span>-->
+						<!--						</label>-->
+					</div>
+
+					<div class="wrap-input100">
+						<input id="ironPrice" class="input100" type="text" name="ironPrice" placeholder="钢材单价">
+					</div>
+
+					<div class="wrap-input100">
+						<input id="ironAmount" class="input100" type="text" name="ironAmount" placeholder="钢材数量">
+					</div>
+
+					<div class="wrap-input100">
+						<input id="totalPrice" class="input100" type="text" name="totalPrice" placeholder="总金额">
+					</div>
+
+					<div class="wrap-input100">
+						<input id="profit" class="input100" type="text" name="profit" placeholder="毛利润">
+					</div>
+					<div class="wrap-input100">
+						<input id="paymentData" class="input100" type="text" name="paymentData" placeholder="付款日期">
+					</div>
+					<div class="wrap-input100">
+						<input id="dealAmount" class="input100" type="text" name="dealAmount" placeholder="交货数量">
+					</div>
+					<div class="wrap-input100">
+						<input id="pickupAmount" class="input100" type="text" name="pickupAmount" placeholder="提货数量">
+					</div>
+					<div class="wrap-input100">
+						<input id="pickupCompany" class="input100" type="text" name="pickupCompany" placeholder="提货公司">
+					</div>
+
+					<div class="modal-footer" id="here">
+						<button type="submit" class="btn btn-primary">提交</button>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<!--===============================================================================================-->
+<script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'vendor/animsition/js/animsition.min.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'vendor/bootstrap/js/popper.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'vendor/select2/select2.min.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'vendor/daterangepicker/moment.min.js' %}"></script>
+<script src="{% static 'vendor/daterangepicker/daterangepicker.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'vendor/countdowntime/countdowntime.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'js/main.js' %}"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<!--	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>-->
+<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-23581568-13');
+	</script>
+</body>
+</html>
