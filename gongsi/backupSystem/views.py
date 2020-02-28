@@ -15,9 +15,12 @@ allIronData = {}
 
 # 收取钢材信息
 def getData(request):
-    response_data = {}
-    data = {}
+    response_data = {'isExist': 0}
+    data = {'flag': 0}
     if request.POST.get("action") == 'POST':
+
+        if request.POST.get('ironName') in allIronData.keys():
+            response_data['isExist'] = 1
         data['ironName'] = request.POST.get('ironName')
         data['ironPrice'] = request.POST.get('ironPrice')
         data['Quality'] = request.POST.get('Quality')
@@ -30,6 +33,7 @@ def getData(request):
         # print("存之前： ", allIronData)
         allIronData[data['ironName']] = data
         # print("存之后: ", allIronData)
+
     response_data['ironName'] = request.POST.get('ironName')
     return JsonResponse(response_data)
 
@@ -59,7 +63,6 @@ def getProjectData(request):
                 form.pickupAmount = allIronData[data]['pickupAmount']
                 form.pickupCompany = allIronData[data]['pickupCompany']
                 form.save()
-
             allIronData.clear()
 
     return redirect(addProject)
@@ -80,7 +83,7 @@ def renderManagement(request):
 def sendDataBack(request):
     # print(request.POST.get('ironName'))
     if request.POST.get('action') == 'POST':
-        print(allIronData[request.POST.get('ironName')])
+        # print(allIronData[request.POST.get('ironName')])
         return JsonResponse(allIronData[str(request.POST.get('ironName'))])
     return "error"
 

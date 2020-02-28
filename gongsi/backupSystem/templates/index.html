@@ -73,7 +73,10 @@
 				<div class="wrap-input100">
 					<div class="row" id="irons">
 						<div class="col">
-							<button type="button" class="contact100-form-btn " data-toggle="modal" data-target="#exampleModal">
+							<button type="button" class="contact100-form-btn "
+									data-toggle="modal"
+									data-target="#exampleModal"
+									onclick=document.getElementById("do").reset()>
 								添加钢材信息
 							</button>
 						</div>
@@ -166,7 +169,7 @@
 				</button>
 			</div>
 			<div class="modal-body" >
-				<form class="contact100-form validate-form" id="do" method="POST" action="/">
+				<form class="contact100-form validate-form" id="do" method="POST" onsubmit="self.close()">
 					{% csrf_token %}
 
 					<div class="wrap-input100 validate-input">
@@ -233,6 +236,10 @@
 
 <script type="text/javascript">
 		function add() {
+			if($('#ironName').val() == ''){
+				return false;
+			}
+
 			$.ajax({
 				type: 'POST',
 				url: '{% url "getData" %}',
@@ -247,11 +254,15 @@
 						'dealAmount': $('#dealAmount').val(),
 						'pickupAmount': $('#pickupAmount').val(),
 						'pickupCompany': $('#pickupCompany').val()
-
 				},
 				dataType: 'json',
 				success: function (data) {
 					alert("success");
+					if(data.isExist == 1){
+						alert(data.isExist);
+						return;
+					}
+
 					var inp = document.createElement("button");
                     inp.type = "button";
                     inp.innerHTML = data.ironName;
@@ -270,12 +281,13 @@
 					alert("something wrong");
 				}
 			});
-			return false;
+
+			return true;
 		};
 
 
 		function iron_information(param) {
-			name = param.innerHTML;
+			var name = param.innerHTML;
             $.ajax({
                 type: 'POST',
 				url: '{% url 'sendDataBack' %}',
