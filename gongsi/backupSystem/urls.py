@@ -7,4 +7,6 @@ urlpatterns = [
     path('getProjectData/', views.getProjectData, name='getProjectData'),
     path('delete/', views.deleteAllData, name='deleteAllData'),
     path('management/', views.renderManagement, name='manage'),
+    path('searchByForm/', views.searchByForm, name='searchByForm'),
+    path('sendDataBack/', views.sendDataBack, name='sendDataBack'),
 ]

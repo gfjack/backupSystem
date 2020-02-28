@@ -72,7 +72,7 @@
 				{% csrf_token %}
 				<div class="wrap-input100">
 					<div class="row">
-						<div class="col ">
+						<div class="col" id="irons">
 							<button type="button" class="contact100-form-btn " data-toggle="modal" data-target="#exampleModal">
 								添加钢材信息
 							</button>
@@ -166,7 +166,7 @@
 				</button>
 			</div>
 			<div class="modal-body" >
-				<form class="contact100-form validate-form" id="do" method="POST" action="">
+				<form class="contact100-form validate-form" id="do" method="POST" action="/">
 					{% csrf_token %}
 
 					<div class="wrap-input100 validate-input">
@@ -252,6 +252,16 @@
 				dataType: 'json',
 				success: function (data) {
 					alert("success");
+					var inp = document.createElement("button");
+                    inp.type = "button";
+                    inp.innerHTML = data.ironName;
+                    inp.setAttribute('value',data.ironName);
+                    inp.setAttribute('class',"contact100-form-btn ");
+                    inp.setAttribute('data-toggle','modal');
+                    inp.setAttribute('data-target','#exampleModal');
+                    document.getElementById('irons').append(inp);
+                    inp.setAttribute('onclick', "iron_information("+inp.value+")");
+
 				},
 				error: function(data) {
 					alert("something wrong");
@@ -259,6 +269,34 @@
 			});
 			return false;
 		};
+
+
+
+
+		function iron_information(name) {
+		alert(1212);
+            $.ajax({
+                type: 'POST',
+				url: '{% url 'sendDataBack' %}',
+				data: {
+						'action':'POST',
+						'csrfmiddlewaretoken': '{{ csrf_token }}',
+						'ironName':name
+				},
+                dataType: 'json',
+                success: function (data) {
+                    document.getElementById('ironName').innerHTML = data.ironName;
+                    document.getElementById('ironPrice').innerHTML = data.ironPrice;
+                    document.getElementById('Quality').innerHTML = data.Quality;
+                    document.getElementById('ironProfit').innerHTML = data.ironProfit;
+                    document.getElementById('paymentDate').innerHTML = data.paymentDate;
+                    document.getElementById('dealAmount').innerHTML = data.dealAmount;
+                    document.getElementById('pickupAmount').innerHTML = data.pickupAmount;
+                    document.getElementById('pickupCompany').innerHTML = data.pickupCompany;
+                },
+            })
+        }
+
 	</script>
 </body>
 </html>

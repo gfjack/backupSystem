@@ -10,12 +10,13 @@ def addProject(request):
 
 
 # 读取钢材信息表格数据
-data = {}
+allIronData = {}
 
 
 # 收取钢材信息
 def getData(request):
     response_data = {}
+    data = {}
     if request.POST.get("action") == 'POST':
         data['ironName'] = request.POST.get('ironName')
         data['ironPrice'] = request.POST.get('ironPrice')
@@ -26,6 +27,9 @@ def getData(request):
         data['dealAmount'] = request.POST.get('dealAmount')
         data['pickupAmount'] = request.POST.get('pickupAmount')
         data['pickupCompany'] = request.POST.get('pickupCompany')
+        # print("存之前： ", allIronData)
+        allIronData[data['ironName']] = data
+        # print("存之后: ", allIronData)
     response_data['ironName'] = request.POST.get('ironName')
     return JsonResponse(response_data)
 
@@ -33,71 +37,55 @@ def getData(request):
 # 收集项目和发货单信息
 def getProjectData(request):
     if request.method == 'POST':
-        form = IronData()
-        form.formNumber = request.POST.get('formNumber')
-        form.ironName = data['ironName']
-        form.ironPrice = data['ironPrice']
-        form.Quality = data['Quality']
-        form.ironProfit = data['ironProfit']
-        form.paymentDate = data['paymentDate']
-        form.dealAmount = data['dealAmount']
-        form.pickupAmount = data['pickupAmount']
-        form.pickupCompany = data['pickupCompany']
-        data.clear()
+
         projectForm = ProjectForm(request.POST)
         excelForm = ExcelForm(request.POST)
-
-        # print(form.formNumber)
-        # print(form.ironName)
-        # print(form.ironPrice)
-        # print(form.Quality)
-        # print(form.ironProfit)
-        # print(form.paymentDate)
-        # print(form.dealAmount)
-        # print(form.pickupAmount)
-        # print(form.pickupCompany)
-        # print(projectForm)
-
-        # projectForm.projectName = request.POST.get('projectName')
-        # projectForm.formNumber = request.POST.get('formNumber')
-        # excelForm.formNumber = request.POST.get('formNumber')
-        # excelForm.time = request.POST.get('time')
-        # excelForm.destination = request.POST.get('destination')
-        # excelForm.notes = request.POST.get("notes")
-        # excelForm.deliveryAmount = request.POST.get('deliveryAmount')
-        # excelForm.deliveryPlate = request.POST.get('deliveryPlate')
-        # excelForm.deliveryPerson = request.POST.get('deliveryPerson')
-        # excelForm.deliveryPickFee = request.POST.get('deliveryPickFee')
-
-        # print(excelForm.formNumber)
-        # print(excelForm.time)
-        # print(excelForm.destination)
-        # print(excelForm.notes)
-        # print(excelForm.deliveryAmount)
-        # print(excelForm.deliveryPlate)
-        # print(excelForm.deliveryPerson)
-        # print(excelForm.deliveryPickFee)
 
         # 存进数据库
         if excelForm.is_valid() and projectForm.is_valid():
             excelForm.save()
             projectForm.save()
-            form.save()
+            tmpFormNumber = request.POST.get('formNumber')
 
-            # print(form.formNumber)
-            # print(projectForm.formNumber)
-            # print(excelForm.formNumber)
-            # form.save(commit=True)
-            # projectForm.save(commit=True)
-            # excelForm.save(commit=True)
+            for data in allIronData:
+                form = IronData()
+                form.formNumber = tmpFormNumber
+                form.ironName = allIronData[data]['ironName']
+                form.ironPrice = allIronData[data]['ironPrice']
+                form.Quality = allIronData[data]['Quality']
+                form.ironProfit = allIronData[data]['ironProfit']
+                form.paymentDate = allIronData[data]['paymentDate']
+                form.dealAmount = allIronData[data]['dealAmount']
+                form.pickupAmount = allIronData[data]['pickupAmount']
+                form.pickupCompany = allIronData[data]['pickupCompany']
+                form.save()
+
+            allIronData.clear()
+
     return redirect(addProject)
 
 
 def deleteAllData(request):
     formData.objects.all().delete()
+    IronData.objects.all().delete()
+    projectInfo.objects.all().delete()
 
-    return HttpResponse('deleted')
+    return redirect(addProject)
 
 
 def renderManagement(request):
     return render(request, 'management.html')
+
+
+def sendDataBack(request):
+    print(request.POST.get('ironName'))
+    if request.POST.get('action') == 'POST':
+        print(allIronData[request.POST.get('ironName')])
+        return JsonResponse(allIronData[str(request.POST.get('ironName'))])
+    return "error"
+
+
+def searchByForm(request):
+
+    response = {'ok': "ok"}
+    return JsonResponse(response)
