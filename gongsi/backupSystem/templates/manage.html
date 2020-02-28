@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    	{% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Material Design for Bootstrap</title>
+  <!-- MDB icon -->
+  <link rel="icon" href="{% static 'manage/img/mdb-favicon.ico' %}" type="{% static 'manage/image/x-icon' %}">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <!-- Google Fonts Roboto -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="{% static 'manage/css/bootstrap.min.css' %}">
+  <!-- Material Design Bootstrap -->
+  <link rel="stylesheet" href="{% static 'manage/css/mdb.min.css' %}">
+  <!-- Your custom styles (optional) -->
+</head>
+<body>
+<div class="row">
+    <div class="col-10">
+        <form class="form-inline" method="post">
+            <div class="input-group mb-2 mr-sm-2">
+                <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="输入提货单编号">
+            </div>
+            <button type="button" class="btn btn-primary mb-2" onclick="searchByForm()" onsubmit="return false;">搜索</button>
+        </form>
+    </div>
+    <div class="col-2">
+        <a class="btn btn-primary mb-2" href="{% url 'add-project' %}">添加</a>
+    </div>
+</div>
+
+
+  <table id="dtMaterialDesignExample" class="table table-striped" cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th class="th-sm">项目
+        </th>
+        <th class="th-sm">提货单编号
+        </th>
+        <th class="th-sm">规格
+        </th>
+        <th class="th-sm">时间
+        </th>
+        <th class="th-sm">目的地
+        </th>
+        <th class="th-sm">运费
+        </th>
+        <th class="th-sm">车号
+        </th>
+        <th class="th-sm">运输人
+        </th>
+        <th class="th-sm">吊装费
+        </th>
+        <th class="th-sm">备注
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a href="#" class="contact100-form-btn" data-toggle="modal" data-target="#exampleModal">南坪</a> </td>
+        <td>00001</td>
+        <td>螺纹钢18E</td>
+        <td>2019.10.01</td>
+        <td>渝北</td>
+        <td>2000</td>
+        <td>A01321</td>
+        <td>古丰杰</td>
+        <td>2000</td>
+        <td>无</td>
+      </tr>
+      <tr>
+        <td><a href="#" class="contact100-form-btn" data-toggle="modal" data-target="#exampleModal">南坪</a> </td>
+        <td>00001</td>
+        <td>螺纹钢18E</td>
+        <td>2019.10.01</td>
+        <td>渝北</td>
+        <td>2000</td>
+        <td>A01321</td>
+        <td>古丰杰</td>
+        <td>2000</td>
+        <td>无</td>
+      </tr>
+
+
+    </tbody>
+
+  </table>
+
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  	<div class="modal-dialog" role="document">
+  		<div class="modal-content">
+  			<div class="modal-header">
+  				<h5 class="modal-title" id="exampleModalLabel">钢材信息</h5>
+  				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+  					<span aria-hidden="true">&times;</span>
+  				</button>
+  			</div>
+  			<div class="modal-body" >
+
+  					<div class="wrap-input100 validate-input">
+  						<input id="ironName" class="input100" type="text" name="ironName" placeholder="钢材规格">
+  					</div>
+  					<div class="wrap-input100">
+  						<input id="ironPrice" class="input100" type="text" name="ironPrice" placeholder="钢材单价">
+  					</div>
+  					<div class="wrap-input100">
+  						<input id="Quality" class="input100" type="text" name="Quality" placeholder="钢材数量">
+  					</div>
+  					<!--					<div class="wrap-input100">-->
+  					<!--						<input id="totalPrice" class="input100" type="text" name="totalPrice" placeholder="总金额">-->
+  					<!--					</div>-->
+  					<div class="wrap-input100">
+  						<input id="ironProfit" class="input100" type="text" name="ironProfit" placeholder="毛利润">
+  					</div>
+  					<div class="wrap-input100">
+  						<input id="paymentDate" class="input100" type="Date" name="paymentDate" placeholder="付款日期">
+  					</div>
+  					<div class="wrap-input100">
+  						<input id="dealAmount" class="input100" type="text" name="dealAmount" placeholder="交货数量">
+  					</div>
+  					<div class="wrap-input100">
+  						<input id="pickupAmount" class="input100" type="text" name="pickupAmount" placeholder="提货数量">
+  					</div>
+  					<div class="wrap-input100">
+  						<input id="pickupCompany" class="input100" type="text" name="pickupCompany" placeholder="提货公司">
+  					</div>
+  					<div class="modal-footer">
+  						<button type="button" class="btn btn-primary" onclick="add()">确定</button>
+  					</div>
+  			</div>
+  		</div>
+  	</div>
+  </div>
+
+
+  <!-- jQuery -->
+  <script type="text/javascript" src="{% static 'manage/js/jquery.min.js' %}"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="{% static 'manage/js/popper.min.js' %}"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="{% static 'manage/js/bootstrap.min.js' %}"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="{% static 'manage/js/mdb.min.js' %}"></script>
+  <!-- Your custom scripts (optional) -->
+  <script type="text/javascript">
+  // Material Design example
+  </script>
+
+</body>
+</html>

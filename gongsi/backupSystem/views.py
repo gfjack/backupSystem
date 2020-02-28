@@ -1,3 +1,4 @@
+from django.core import serializers
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from .forms import *
@@ -77,7 +78,7 @@ def deleteAllData(request):
 
 
 def renderManagement(request):
-    return render(request, 'management.html')
+    return render(request, 'manage.html')
 
 
 def sendDataBack(request):
@@ -89,6 +90,18 @@ def sendDataBack(request):
 
 
 def searchByForm(request):
+    if request.POST.get('action') == 'POST':
+        formId = request.POST.get('formId')
+        # print(formId)
+        filteredForm = list(formData.objects.filter(formNumber=str(formId)).values())
+        filteredProject = list(projectInfo.objects.filter(formNumber=str(formId)).values())
+        filteredIron = list(IronData.objects.filter(formNumber=str(formId)).values())
+        response_data = {"project": filteredProject, "form": filteredForm, "iron": filteredIron}
 
-    response = {'ok': "ok"}
-    return JsonResponse(response)
+        print(response_data["project"])
+        print(response_data["form"])
+        print(response_data["iron"])
+
+        return JsonResponse(response_data, safe=False)
+
+
