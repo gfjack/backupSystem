@@ -44,7 +44,14 @@
 
 		<div>
 			<button class="btn-show-contact100">
-				发货信息录入系统
+				发货信息录入
+			</button>
+		</div>
+		<div>
+			<button class="btn btn-light">
+				<a href="{% url 'manage' %}">
+					查询删除
+				</a>
 			</button>
 		</div>
 	</div>
@@ -141,6 +148,9 @@
 					</button>
 				</div>
 			</form>
+			<form action="{% url 'deleteAllData' %}">
+				<button type="submit">delete all</button>
+			</form>
 		</div>
 	</div>
 </div>
@@ -168,9 +178,9 @@
 					<div class="wrap-input100">
 						<input id="Quality" class="input100" type="text" name="Quality" placeholder="钢材数量">
 					</div>
-<!--					<div class="wrap-input100">-->
-<!--						<input id="totalPrice" class="input100" type="text" name="totalPrice" placeholder="总金额">-->
-<!--					</div>-->
+					<!--					<div class="wrap-input100">-->
+					<!--						<input id="totalPrice" class="input100" type="text" name="totalPrice" placeholder="总金额">-->
+					<!--					</div>-->
 					<div class="wrap-input100">
 						<input id="ironProfit" class="input100" type="text" name="ironProfit" placeholder="毛利润">
 					</div>

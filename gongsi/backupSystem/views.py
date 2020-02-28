@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from .forms import *
 from .models import *
@@ -91,3 +91,13 @@ def getProjectData(request):
             # projectForm.save(commit=True)
             # excelForm.save(commit=True)
     return redirect(addProject)
+
+
+def deleteAllData(request):
+    formData.objects.all().delete()
+
+    return HttpResponse('deleted')
+
+
+def renderManagement(request):
+    return render(request, 'management.html')
