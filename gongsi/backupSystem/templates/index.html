@@ -71,8 +71,8 @@
 			<form class="contact100-form validate-form" method="POST" action="{% url 'getProjectData' %}">
 				{% csrf_token %}
 				<div class="wrap-input100">
-					<div class="row">
-						<div class="col" id="irons">
+					<div class="row" id="irons">
+						<div class="col">
 							<button type="button" class="contact100-form-btn " data-toggle="modal" data-target="#exampleModal">
 								添加钢材信息
 							</button>
@@ -259,8 +259,11 @@
                     inp.setAttribute('class',"contact100-form-btn ");
                     inp.setAttribute('data-toggle','modal');
                     inp.setAttribute('data-target','#exampleModal');
-                    document.getElementById('irons').append(inp);
-                    inp.setAttribute('onclick', "iron_information("+inp.value+")");
+                    var div = document.createElement("div");
+                    div.className = "col";
+                    div.appendChild(inp);
+                    document.getElementById('irons').append(div);
+                    inp.setAttribute('onclick', "iron_information(this)");
 
 				},
 				error: function(data) {
@@ -271,10 +274,8 @@
 		};
 
 
-
-
-		function iron_information(name) {
-		alert(1212);
+		function iron_information(param) {
+			name = param.innerHTML;
             $.ajax({
                 type: 'POST',
 				url: '{% url 'sendDataBack' %}',
@@ -285,14 +286,14 @@
 				},
                 dataType: 'json',
                 success: function (data) {
-                    document.getElementById('ironName').innerHTML = data.ironName;
-                    document.getElementById('ironPrice').innerHTML = data.ironPrice;
-                    document.getElementById('Quality').innerHTML = data.Quality;
-                    document.getElementById('ironProfit').innerHTML = data.ironProfit;
-                    document.getElementById('paymentDate').innerHTML = data.paymentDate;
-                    document.getElementById('dealAmount').innerHTML = data.dealAmount;
-                    document.getElementById('pickupAmount').innerHTML = data.pickupAmount;
-                    document.getElementById('pickupCompany').innerHTML = data.pickupCompany;
+                    document.getElementById('ironName').value = data.ironName;
+                    document.getElementById('ironPrice').value = data.ironPrice;
+                    document.getElementById('Quality').value = data.Quality;
+                    document.getElementById('ironProfit').value = data.ironProfit;
+                    document.getElementById('paymentDate').value = data.paymentDate;
+                    document.getElementById('dealAmount').value = data.dealAmount;
+                    document.getElementById('pickupAmount').value = data.pickupAmount;
+                    document.getElementById('pickupCompany').value = data.pickupCompany;
                 },
             })
         }

@@ -78,7 +78,7 @@ def renderManagement(request):
 
 
 def sendDataBack(request):
-    print(request.POST.get('ironName'))
+    # print(request.POST.get('ironName'))
     if request.POST.get('action') == 'POST':
         print(allIronData[request.POST.get('ironName')])
         return JsonResponse(allIronData[str(request.POST.get('ironName'))])
