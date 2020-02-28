@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import *
 from .models import *
 
@@ -9,29 +9,41 @@ def addProject(request):
     return render(request, 'index.html')
 
 
+# 读取钢材信息表格数据
+data = {}
+
+
 # 收取钢材信息
 def getData(request):
     response_data = {}
     if request.POST.get("action") == 'POST':
-        form = ironForm(request.POST)
-
-        # form.ironName = request.POST.get('ironName')
-        # form.ironPrice = request.POST.get('ironPrice')
-        # form.Quality = request.POST.get('Quality')
-        # # form.totalPrice = request.POST.get('totalPrice')
-        # form.ironProfit = request.POST.get('ironProfit')
-        # form.paymentDate = request.POST.get('paymentDate')
-        # form.dealAmount = request.POST.get('dealAmount')
-        # form.pickupAmount = request.POST.get('pickupAmount')
-        # form.pickupCompany = request.POST.get('pickupCompany')
-        response_data['ironName'] = request.POST.get('ironName')
+        data['ironName'] = request.POST.get('ironName')
+        data['ironPrice'] = request.POST.get('ironPrice')
+        data['Quality'] = request.POST.get('Quality')
+        # form.totalPrice = request.POST.get('totalPrice') if not None else "Null"
+        data['ironProfit'] = request.POST.get('ironProfit')
+        data['paymentDate'] = request.POST.get('paymentDate')
+        data['dealAmount'] = request.POST.get('dealAmount')
+        data['pickupAmount'] = request.POST.get('pickupAmount')
+        data['pickupCompany'] = request.POST.get('pickupCompany')
+    response_data['ironName'] = request.POST.get('ironName')
     return JsonResponse(response_data)
 
 
 # 收集项目和发货单信息
 def getProjectData(request):
     if request.method == 'POST':
-        # form.formNumber = request.POST.get('formNumber')
+        form = IronData()
+        form.formNumber = request.POST.get('formNumber')
+        form.ironName = data['ironName']
+        form.ironPrice = data['ironPrice']
+        form.Quality = data['Quality']
+        form.ironProfit = data['ironProfit']
+        form.paymentDate = data['paymentDate']
+        form.dealAmount = data['dealAmount']
+        form.pickupAmount = data['pickupAmount']
+        form.pickupCompany = data['pickupCompany']
+        data.clear()
         projectForm = ProjectForm(request.POST)
         excelForm = ExcelForm(request.POST)
 
@@ -66,8 +78,11 @@ def getProjectData(request):
         # print(excelForm.deliveryPerson)
         # print(excelForm.deliveryPickFee)
 
-        # if form.is_valid():
-        #     print("1111111111111111111111111111111")
+        # 存进数据库
+        if excelForm.is_valid() and projectForm.is_valid():
+            excelForm.save()
+            projectForm.save()
+            form.save()
 
             # print(form.formNumber)
             # print(projectForm.formNumber)
@@ -75,4 +90,4 @@ def getProjectData(request):
             # form.save(commit=True)
             # projectForm.save(commit=True)
             # excelForm.save(commit=True)
-    return render(request, 'index.html')
+    return redirect(addProject)
