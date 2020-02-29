@@ -3,7 +3,7 @@
 <head>
 	{%  load crispy_forms_tags %}
 	{% load static %}
-	<title>信息录入系统</title>
+	<title>信息录入</title>
 	<meta charset="UTF-8">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,7 +44,7 @@
 
 		<div>
 			<button class="btn-show-contact100">
-				发货信息录入
+				信息录入
 			</button>
 		</div>
 		<div>
@@ -64,7 +64,7 @@
 		</button>
 
 		<div class="contact100-form-title" style="background-image: url('{% static 'images/bg-02.jpg' %}');">
-			<span>发货信息录入系统</span>
+			<span>信息录入</span>
 		</div>
 
 		<div class="overflow-auto">
@@ -169,7 +169,7 @@
 				</button>
 			</div>
 			<div class="modal-body" >
-				<form class="contact100-form validate-form" id="do" method="POST" onsubmit="self.close()">
+				<form class="contact100-form validate-form" id="do" method="POST">
 					{% csrf_token %}
 
 					<div class="wrap-input100 validate-input">

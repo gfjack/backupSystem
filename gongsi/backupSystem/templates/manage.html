@@ -19,8 +19,8 @@
   <!-- Your custom styles (optional) -->
 </head>
 <body>
-<div class="row">
-    <div class="col-10">
+<div class="row" >
+    <div class="col-8">
         <form class="form-inline" method="post" id="addNew">
             {% csrf_token %}
             <div class="input-group mb-2 mr-sm-2">
@@ -32,8 +32,10 @@
     <div class="col-2">
         <a class="btn btn-primary mb-2" href="{% url 'add-project' %}">添加</a>
     </div>
+    <div class="col-2">
+        <a class="btn btn-primary mb-2" href="{% url 'export' %}">导出所有提货单数据</a>
+    </div>
 </div>
-
 
   <table id="dtMaterialDesignExample" class="table table-striped" cellspacing="0" width="100%">
     <thead>
@@ -61,37 +63,11 @@
       </tr>
     </thead>
     <tbody id="tbody">
-<!--      <tr>-->
-<!--        <td><a href="#" class="contact100-form-btn" data-toggle="modal" data-target="#exampleModal">南坪</a> </td>-->
-<!--        <td>00001</td>-->
-<!--        <td>螺纹钢18E</td>-->
-<!--        <td>2019.10.01</td>-->
-<!--        <td>渝北</td>-->
-<!--        <td>2000</td>-->
-<!--        <td>A01321</td>-->
-<!--        <td>古丰杰</td>-->
-<!--        <td>2000</td>-->
-<!--        <td>无</td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td><a href="#" class="contact100-form-btn" data-toggle="modal" data-target="#exampleModal">南坪</a> </td>-->
-<!--        <td>00001</td>-->
-<!--        <td>螺纹钢18E</td>-->
-<!--        <td>2019.10.01</td>-->
-<!--        <td>渝北</td>-->
-<!--        <td>2000</td>-->
-<!--        <td>A01321</td>-->
-<!--        <td>古丰杰</td>-->
-<!--        <td>2000</td>-->
-<!--        <td>无</td>-->
-<!--      </tr>-->
-
 
     </tbody>
 
   </table>
-
-
+  <!--弹窗表格-->
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   	<div class="modal-dialog" role="document">
   		<div class="modal-content">
@@ -102,42 +78,41 @@
   				</button>
   			</div>
   			<div class="modal-body" >
-
-  					<div class="wrap-input100 validate-input">
-  						<input id="ironName" class="input100" type="text" name="ironName" placeholder="钢材规格">
+                <form class="contact100-form validate-form" action="">
+                    {% csrf_token %}
+                    <div class="wrap-input100 validate-input">
+  						<input id="ironName" class="input100" type="text" name="ironName" placeholder="钢材规格">规格
   					</div>
   					<div class="wrap-input100">
-  						<input id="ironPrice" class="input100" type="text" name="ironPrice" placeholder="钢材单价">
+  						<input id="ironPrice" class="input100" type="text" name="ironPrice" placeholder="钢材单价">单价
   					</div>
   					<div class="wrap-input100">
-  						<input id="Quality" class="input100" type="text" name="Quality" placeholder="钢材数量">
-  					</div>
-  					<!--					<div class="wrap-input100">-->
-  					<!--						<input id="totalPrice" class="input100" type="text" name="totalPrice" placeholder="总金额">-->
-  					<!--					</div>-->
-  					<div class="wrap-input100">
-  						<input id="ironProfit" class="input100" type="text" name="ironProfit" placeholder="毛利润">
+  						<input id="Quality" class="input100" type="text" name="Quality" placeholder="钢材数量">数量
   					</div>
   					<div class="wrap-input100">
-  						<input id="paymentDate" class="input100" type="Date" name="paymentDate" placeholder="付款日期">
+  						<input id="ironProfit" class="input100" type="text" name="ironProfit" placeholder="毛利润">毛利润
   					</div>
   					<div class="wrap-input100">
-  						<input id="dealAmount" class="input100" type="text" name="dealAmount" placeholder="交货数量">
+  						<input id="paymentDate" class="input100" type="Date" name="paymentDate" placeholder="付款日期">付款日期
   					</div>
   					<div class="wrap-input100">
-  						<input id="pickupAmount" class="input100" type="text" name="pickupAmount" placeholder="提货数量">
+  						<input id="dealAmount" class="input100" type="text" name="dealAmount" placeholder="交货数量">交货数量
   					</div>
   					<div class="wrap-input100">
-  						<input id="pickupCompany" class="input100" type="text" name="pickupCompany" placeholder="提货公司">
+  						<input id="pickupAmount" class="input100" type="text" name="pickupAmount" placeholder="提货数量">提货数量
+  					</div>
+  					<div class="wrap-input100">
+  						<input id="pickupCompany" class="input100" type="text" name="pickupCompany" placeholder="提货公司">提货公司
   					</div>
   					<div class="modal-footer">
-  						<button type="button" class="btn btn-primary" onclick="add()">确定</button>
+  						<button type="submit" class="btn btn-primary" onclick="ModifyIronInfo()">确定</button>
   					</div>
+                </form>
+
   			</div>
   		</div>
   	</div>
   </div>
-
 
   <!-- jQuery -->
   <script type="text/javascript" src="{% static 'manage/js/jquery.min.js' %}"></script>
@@ -149,10 +124,12 @@
   <script type="text/javascript" src="{% static 'manage/js/mdb.min.js' %}"></script>
   <!-- Your custom scripts (optional) -->
   <script type="text/javascript">
-    $('#addNew').on('submit', function(e) {
+    var allData;
+    var oldIronName;
 
+    $('#addNew').on('submit', function(e) {
         e.preventDefault();
-        e.stopPropagation(); // only neccessary if something above is listening to the (default-)event too
+        e.stopPropagation();
 
         $.ajax({
 				type: 'POST',
@@ -164,6 +141,7 @@
 				},
 				dataType: 'json',
 				success: function (data) {
+				    allData = data;
 				    renderData(data);
 					alert("success");
 				},
@@ -197,41 +175,92 @@
                 time, destination, deliveryAmount,
                 deliveryPlate, deliveryPerson, deliveryPickFee,
                 notes];
+
         for(var i=0;i<NumOfIrons;i++) {
           render[2] = data.iron[i].ironName;
 
           var tr = document.createElement("tr");
-          var a = document.createElement("a");
-          a.href = "#";
-          a. className = "contact100-form-btn";
-          a.setAttribute('data-toggle','modal');
-          a.setAttribute('data-target','#exampleModal');
-          a.innerHTML = projectName;
-          var td = document.createElement("td");
-          td.appendChild(a);
-          tr.appendChild(td);
-
-          for(var j=1;j<10;j++) {
+          for(var j=0;j<10;j++) {
             td = document.createElement("td");
-            td.innerHTML = render[j];
+            if(j == 2) {
+              var a = document.createElement("button");
+              a.href = "#";
+              a. className = "contact100-form-btn";
+              a.setAttribute('data-toggle','modal');
+              a.setAttribute('data-target','#exampleModal');
+              a.innerHTML = render[j];
+              a.setAttribute('onclick', "GetDetail(this)");
+              td.appendChild(a);
+            } else {td.innerHTML = render[j];}
+
             tr.appendChild(td);
           }
           document.getElementById("tbody").appendChild(tr);
-
-          // ironName = data.iron[i].ironName;
-          // ironPrice = data.iron[i].ironPrice;
-          // quality = data.iron[i].Quality;
-          // ironProfit = data.iron[i].ironProfit;
-          // paymentDate = data.iron[i].paymentDate;
-          // dealAmount = data.iron[i].dealAmount;
-          // pickupAmount = data.iron[i].pickupAmount;
-          // pickupCompany = data.iron[i].pickupCompany;
         }
+    }
 
-}
 
+    function GetDetail(param) {
+        ironName = param.innerHTML;
+        oldIronName = ironName;
+        var target = -1;
+        for(var i=0;i<allData.iron.length;i++) {
+            if (ironName == allData.iron[i].ironName) { target = i; break; }
+        }
+        targetData = [allData.iron[target].ironName,
+                     allData.iron[target].ironPrice,
+                     allData.iron[target].Quality,
+                     allData.iron[target].ironProfit,
+                     allData.iron[target].paymentDate,
+                     allData.iron[target].dealAmount,
+                     allData.iron[target].pickupAmount,
+                     allData.iron[target].pickupCompany];
+
+                    document.getElementById('ironName').value = targetData[0];
+                    document.getElementById('ironPrice').value = targetData[1];
+                    document.getElementById('Quality').value = targetData[2];
+                    document.getElementById('ironProfit').value = targetData[3];
+                    document.getElementById('paymentDate').value = targetData[4];
+                    document.getElementById('dealAmount').value = targetData[5];
+                    document.getElementById('pickupAmount').value = targetData[6];
+                    document.getElementById('pickupCompany').value = targetData[7];
+
+    }
+
+    function ModifyIronInfo() {
+			if($('#ironName').val() == ''){
+				return false;
+			}
+
+			$.ajax({
+				type: 'POST',
+				url: '{% url "modifyIronData" %}',
+				data: {
+						'action':'POST',
+						'csrfmiddlewaretoken': '{{ csrf_token }}',
+						'formNumber': allData.project[0].formNumber,
+						'ironName':oldIronName,
+						'NewIronName':$('#ironName').val(),
+						'ironPrice':$('#ironPrice').val(),
+						'Quality':$('#Quality').val(),
+						'ironProfit': $('#ironProfit').val(),
+						'paymentDate': $('#paymentDate').val(),
+						'dealAmount': $('#dealAmount').val(),
+						'pickupAmount': $('#pickupAmount').val(),
+						'pickupCompany': $('#pickupCompany').val()
+				},
+				dataType: 'json',
+				success: function (data) {
+					alert("success");
+				},
+				error: function(data) {
+					alert("something wrong");
+				}
+			});
+
+			return true;
+		};
 
   </script>
-
 </body>
 </html>

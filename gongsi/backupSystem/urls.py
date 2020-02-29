@@ -9,4 +9,6 @@ urlpatterns = [
     path('management/', views.renderManagement, name='manage'),
     path('searchByForm/', views.searchByForm, name='searchByForm'),
     path('sendDataBack/', views.sendDataBack, name='sendDataBack'),
+    path('modifyData/', views.modifyIronData, name='modifyIronData'),
+    path('export/', views.export_users_xls, name='export'),
 ]
