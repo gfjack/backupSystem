@@ -22,10 +22,11 @@
 <div class="row">
     <div class="col-10">
         <form class="form-inline" method="post">
+            {% csrf_token %}
             <div class="input-group mb-2 mr-sm-2">
                 <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="输入提货单编号">
             </div>
-            <button type="button" class="btn btn-primary mb-2" onclick="searchByForm()" onsubmit="return false;">搜索</button>
+            <button type="button" class="btn btn-primary mb-2" onclick="searchByForm();" onsubmit="return false;">搜索</button>
         </form>
     </div>
     <div class="col-2">
@@ -59,31 +60,31 @@
         </th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
-        <td><a href="#" class="contact100-form-btn" data-toggle="modal" data-target="#exampleModal">南坪</a> </td>
-        <td>00001</td>
-        <td>螺纹钢18E</td>
-        <td>2019.10.01</td>
-        <td>渝北</td>
-        <td>2000</td>
-        <td>A01321</td>
-        <td>古丰杰</td>
-        <td>2000</td>
-        <td>无</td>
-      </tr>
-      <tr>
-        <td><a href="#" class="contact100-form-btn" data-toggle="modal" data-target="#exampleModal">南坪</a> </td>
-        <td>00001</td>
-        <td>螺纹钢18E</td>
-        <td>2019.10.01</td>
-        <td>渝北</td>
-        <td>2000</td>
-        <td>A01321</td>
-        <td>古丰杰</td>
-        <td>2000</td>
-        <td>无</td>
-      </tr>
+    <tbody id="tbody">
+<!--      <tr>-->
+<!--        <td><a href="#" class="contact100-form-btn" data-toggle="modal" data-target="#exampleModal">南坪</a> </td>-->
+<!--        <td>00001</td>-->
+<!--        <td>螺纹钢18E</td>-->
+<!--        <td>2019.10.01</td>-->
+<!--        <td>渝北</td>-->
+<!--        <td>2000</td>-->
+<!--        <td>A01321</td>-->
+<!--        <td>古丰杰</td>-->
+<!--        <td>2000</td>-->
+<!--        <td>无</td>-->
+<!--      </tr>-->
+<!--      <tr>-->
+<!--        <td><a href="#" class="contact100-form-btn" data-toggle="modal" data-target="#exampleModal">南坪</a> </td>-->
+<!--        <td>00001</td>-->
+<!--        <td>螺纹钢18E</td>-->
+<!--        <td>2019.10.01</td>-->
+<!--        <td>渝北</td>-->
+<!--        <td>2000</td>-->
+<!--        <td>A01321</td>-->
+<!--        <td>古丰杰</td>-->
+<!--        <td>2000</td>-->
+<!--        <td>无</td>-->
+<!--      </tr>-->
 
 
     </tbody>
@@ -148,7 +149,87 @@
   <script type="text/javascript" src="{% static 'manage/js/mdb.min.js' %}"></script>
   <!-- Your custom scripts (optional) -->
   <script type="text/javascript">
-  // Material Design example
+
+  	function searchByForm() {
+			$.ajax({
+				type: 'POST',
+				url: '{% url "searchByForm" %}',
+				data: {
+						'action':'POST',
+						'csrfmiddlewaretoken': '{{ csrf_token }}',
+						'formId':$('#inlineFormInputGroupUsername2').val(),
+				},
+				dataType: 'json',
+				success: function (data) {
+				    renderData(data);
+					alert("success");
+				},
+				error: function(data) {
+					alert("something wrong");
+				}
+			});
+
+			return true;
+		};
+
+
+
+
+
+
+
+	function renderData(data) {
+	    formNumber = data.project[0].formNumber;
+        projectName = data.project[0].projectName;
+        time = data.form[0].time;
+        destination = data.form[0].destination;
+        deliveryAmount = data.form[0].deliveryAmount;
+        deliveryPlate = data.form[0].deliveryPlate;
+        deliveryPerson = data.form[0].deliveryPerson;
+        deliveryPickFee = data.form[0].deliveryPickFee;
+        notes = data.form[0].notes;
+
+        NumOfIrons = data.iron.length;
+        if( NumOfIrons<=0 ) {
+          return false;
+        }
+        render = [projectName, formNumber, "", time, destination, deliveryAmount, deliveryPlate, deliveryPerson, deliveryPickFee, notes];
+        for(var i=0;i<NumOfIrons;i++) {
+          render[2] = data.iron[i].ironName;
+
+          var tr = document.createElement("tr");
+
+          var a = document.createElement("a");
+          a.href = "#";
+          a. className = "contact100-form-btn";
+          a.setAttribute('data-toggle','modal');
+          a.setAttribute('data-target','#exampleModal');
+          a.innerHTML = projectName;
+          var td = document.createElement("td");
+          td.appendChild(a);
+          tr.appendChild(td);
+
+          for(var j=1;j<10;j++) {
+            td = document.createElement("td");
+            td.innerHTML = render[j];
+            tr.appendChild(td);
+          }
+
+          document.getElementById("tbody").appendChild(tr);
+
+          // ironName = data.iron[i].ironName;
+          // ironPrice = data.iron[i].ironPrice;
+          // quality = data.iron[i].Quality;
+          // ironProfit = data.iron[i].ironProfit;
+          // paymentDate = data.iron[i].paymentDate;
+          // dealAmount = data.iron[i].dealAmount;
+          // pickupAmount = data.iron[i].pickupAmount;
+          // pickupCompany = data.iron[i].pickupCompany;
+        }
+
+}
+
+
   </script>
 
 </body>
